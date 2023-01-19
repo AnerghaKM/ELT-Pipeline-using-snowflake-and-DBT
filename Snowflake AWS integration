@@ -1,0 +1,67 @@
+1)Create storage integration object
+
+-->create or replace storage integration s3_int
+  TYPE = EXTERNAL_STAGE
+  STORAGE_PROVIDER = S3
+  ENABLED = TRUE 
+  STORAGE_AWS_ROLE_ARN = 'arn:aws:iam::31345:role/AWS_S3_Snowflake_Integration'
+  STORAGE_ALLOWED_LOCATIONS = ('s3://etlpro1/orders.csv')
+  COMMENT = 'Integration with aws s3 buckets' ;
+  
+  Give above command in snowflake with aws role arn and storage location edited as required.
+  s3_int is the name we provided for this integration.
+
+2)Get external ID and update it in s3
+
+-->desc integration s3_int
+
+    s3 = simple storage service
+    arn = amazon resource names
+    iam = integrated account management
+    
+    this command yields few properties
+    
+    Copy 5th one -STORAGE_AWS_IAM_USER_ARN and paste it in aws iam role's trusted entities
+    
+    Thus,we exchanged both integration objects
+    
+3)Create database and schema(if not done throught GUI)
+-->CREATE DATABASE IF NOT EXISTS MYDB;
+-->CREATE SCHEMA IF NOT EXISTS MYDB.file_formats;
+    
+4)Create file format object
+    
+-->CREATE OR REPLACE file format mydb.file_formats.csv_fileformat
+    type = csv
+    field_delimiter = '|'
+    skip_header = 1
+    empty_field_as_null = TRUE;  
+    
+    
+5)Create stage object with integration object & file format object
+-->CREATE OR REPLACE STAGE databasename.schemaname.aws_s3_csv
+    URL = 's3://awss3bucketjana/csv/'
+    STORAGE_INTEGRATION = s3_int
+    FILE_FORMAT = mydb.file_formats.csv_fileformat ;
+
+6)Listing files under your s3 buckets
+-->list @mydb.external_stages.aws_s3_csv;
+
+
+7)Create a table first
+-->CREATE OR REPLACE TABLE mydb.public.customer_data (
+    customerid NUMBER,
+    custname STRING,
+    email STRING,
+    city STRING,
+    state STRING,
+    DOB DATE
+    ); 
+
+8)Use Copy command to load the files
+COPY INTO mydb.public.customer_data
+    FROM @mydb.external_stages.aws_s3_csv
+    PATTERN = '.*customer.*';    
+ 
+9)Validate the data
+SELECT * FROM mydb.public.customer_data;
