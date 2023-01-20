@@ -1,6 +1,10 @@
 # ELT Pipeline using snowflake and DBT 
 
-Data collected from s3 is loaded to snowflake. Data being transformed using DBT.  Used Power BI to create dashboards.
+Data collected from s3 is loaded to snowflake.  
+
+Data loaded from s3 to snowflake stage after integrating snowflake with AWS.
+
+Data being transformed using DBT.  Used Power BI to create dashboards.
 
 # DATA ARCHITECTURE
 
