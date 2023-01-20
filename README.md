@@ -1,15 +1,8 @@
-Welcome to your new dbt project!
+# ELT Pipeline using snowflake and DBT 
 
-### Using the starter project
+Data collected from s3 is loaded to snowflake. Data being transformed using DBT.  Used Power BI to create dashboards.
 
-Try running the following commands:
-- dbt run
-- dbt test
+# DATA ARCHITECTURE
 
 
-### Resources:
-- Learn more about dbt [in the docs](https://docs.getdbt.com/docs/introduction)
-- Check out [Discourse](https://discourse.getdbt.com/) for commonly asked questions and answers
-- Join the [dbt community](http://community.getbdt.com/) to learn from other analytics engineers
-- Find [dbt events](https://events.getdbt.com) near you
-- Check out [the blog](https://blog.getdbt.com/) for the latest news on dbt's development and best practices
+![image](https://user-images.githubusercontent.com/90564625/213705742-2c603441-49f0-497d-a463-cf3c6f280360.png)
